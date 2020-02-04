@@ -35,7 +35,7 @@ var (
 )
 
 func init() {
-	transport.RegisterFlags()
+	transport.RegisterKafkaFlags()
 }
 
 func httpServer(state *utils.StateNetFlow) {
