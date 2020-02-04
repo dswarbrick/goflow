@@ -112,6 +112,14 @@ func main() {
 		sSFlow.Transport = kafkaState
 		sNFL.Transport = kafkaState
 		sNF.Transport = kafkaState
+	} else if *Transport == "nats" {
+		natsState, err := transport.StartNATSProducerFromArgs(log.StandardLogger())
+		if err != nil {
+			log.Fatal(err)
+		}
+		sSFlow.Transport = natsState
+		sNFL.Transport = natsState
+		sNF.Transport = natsState
 	}
 
 	wg := &sync.WaitGroup{}
