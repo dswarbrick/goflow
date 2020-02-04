@@ -50,6 +50,7 @@ var (
 
 func init() {
 	transport.RegisterKafkaFlags()
+	transport.RegisterNATSFlags()
 }
 
 func httpServer(state *utils.StateNetFlow) {
