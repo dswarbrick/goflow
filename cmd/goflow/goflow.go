@@ -39,7 +39,7 @@ var (
 	LogLevel = flag.String("loglevel", "info", "Log level")
 	LogFmt   = flag.String("logfmt", "normal", "Log formatter")
 
-	EnableKafka = flag.Bool("kafka", true, "Enable Kafka")
+	Transport   = flag.String("transport", "kafka", "Transport: {kafka|nats}")
 	MetricsAddr = flag.String("metrics.addr", ":8080", "Metrics address")
 	MetricsPath = flag.String("metrics.path", "/metrics", "Metrics path")
 
@@ -97,7 +97,14 @@ func main() {
 
 	go httpServer(sNF)
 
-	if *EnableKafka {
+	// Choice flag
+	transportChoices := map[string]struct{}{"kafka": {}, "nats": {}}
+	if _, validChoice := transportChoices[*Transport]; !validChoice {
+		fmt.Println("transport must be one of: kafka|nats")
+		os.Exit(1)
+	}
+
+	if *Transport == "kafka" {
 		kafkaState, err := transport.StartKafkaProducerFromArgs(log.StandardLogger())
 		if err != nil {
 			log.Fatal(err)
